@@ -74,7 +74,7 @@ const GiftFinder: React.FC = () => {
                     {/* Archetype Selector */}
                     <div className="input-group">
                         <label className="input-label" htmlFor="archetype">
-                            Looking for a gift for...
+                            Who is this for? ❤️
                         </label>
                         <select
                             id="archetype"
@@ -85,7 +85,7 @@ const GiftFinder: React.FC = () => {
                                 setCategory(''); // Reset category when archetype changes
                             }}
                         >
-                            <option value="" disabled>Select Archetype</option>
+                            <option value="" disabled>Select a loved one...</option>
                             {archetypeOptions.map(opt => (
                                 <option key={opt} value={opt}>{opt}</option>
                             ))}
@@ -95,7 +95,7 @@ const GiftFinder: React.FC = () => {
                     {/* Category Selector */}
                     <div className="input-group">
                         <label className="input-label" htmlFor="category">
-                            In the category...
+                            What do they love? 🎁
                         </label>
                         <select
                             id="category"
@@ -104,7 +104,7 @@ const GiftFinder: React.FC = () => {
                             onChange={(e) => setCategory(e.target.value)}
                             disabled={!archetype}
                         >
-                            <option value="" disabled>Select Category</option>
+                            <option value="" disabled>Select an interest...</option>
                             {categoryOptions.map(opt => (
                                 <option key={opt} value={opt}>{opt}</option>
                             ))}
@@ -114,7 +114,7 @@ const GiftFinder: React.FC = () => {
                     {/* Budget Selector */}
                     <div className="input-group">
                         <label className="input-label" htmlFor="budget">
-                            For a budget...
+                            What's the budget? 💰
                         </label>
                         <select
                             id="budget"
@@ -122,7 +122,7 @@ const GiftFinder: React.FC = () => {
                             value={budget}
                             onChange={(e) => setBudget(e.target.value)}
                         >
-                            <option value="" disabled>Select Budget</option>
+                            <option value="" disabled>Select range...</option>
                             {BUDGETS.map(opt => (
                                 <option key={opt} value={opt}>{opt}</option>
                             ))}
@@ -138,7 +138,7 @@ const GiftFinder: React.FC = () => {
                             disabled={loading}
                         >
                             {loading ? <Loader2 className="animate-spin" size={20} /> : <Gift size={20} />}
-                            Find Gift
+                            Spread Love
                         </button>
                     </div>
                 </div>
