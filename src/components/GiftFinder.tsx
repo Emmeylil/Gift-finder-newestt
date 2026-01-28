@@ -43,22 +43,21 @@ const GiftFinder: React.FC = () => {
             const query = encodeURIComponent(category);
 
             // We will perform a search query
-            const searchUrl = `${baseUrl}${searchPath}?q=${query}`; // &price=... if we want to filter by budget roughly, but parsing budget string is complex.
-            // For now, let's just search by category text.
+            const searchUrl = `${baseUrl}${searchPath}?q=${query}&shop_premium_services=shop_express`;
 
             console.log(`Searching: ${searchUrl}`);
 
-            // The finder.findProductsByUrl logic appends "&page=1" etc.
-            // So we pass the base search URL.
+            // Fetch up to 10 pages as requested
+            const foundProducts = await finder.findProductsByUrl(searchUrl, 10);
 
-            const foundProducts = await finder.findProductsByUrl(searchUrl, 1);
+            // Prioritize Jumia Express products
+            const prioritizedProducts = [...foundProducts].sort((a, b) => {
+                const aExpress = a.isShopExpress || a.shopExpress ? 1 : 0;
+                const bExpress = b.isShopExpress || b.shopExpress ? 1 : 0;
+                return bExpress - aExpress;
+            });
 
-            // Client-side Budget Filtering could happen here if we parse the prices relative to the Budget string.
-            // Given the budget strings are ranges like "N5000 - N10000", we would need price parsing logic.
-            // The provided code has 'extractNumberFromPrice'.
-            // For MVP, lets just show results. The user asked for the "UI component", logic is a bonus.
-
-            setResults(foundProducts);
+            setResults(prioritizedProducts);
 
         } catch (error) {
             console.error("Error finding gifts:", error);
@@ -158,6 +157,9 @@ const GiftFinder: React.FC = () => {
                             {results.map((product, idx) => (
                                 <div key={idx} className="product-card">
                                     <div className="product-image-wrapper">
+                                        {(product.isShopExpress || product.shopExpress) && (
+                                            <div className="express-badge">Express</div>
+                                        )}
                                         <img src={product.image} alt={product.name} className="product-image"
                                             onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/200?text=No+Image'; }} />
                                     </div>
