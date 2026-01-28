@@ -1,0 +1,202 @@
+.gift-finder-container {
+  background: linear-gradient(135deg, #FFB75E 0%, #ED8F03 100%);
+  padding: 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(237, 143, 3, 0.3);
+  font-family: 'Inter', sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.gift-finder-form {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+/* On mobile, stack vertically */
+@media (max-width: 900px) {
+  .gift-finder-form {
+    flex-wrap: wrap;
+  }
+  
+  .input-group {
+    flex: 1 1 100%; /* Full width on mobile */
+    min-width: 250px;
+  }
+  
+  .find-gift-btn {
+    width: 100%;
+    margin-top: 1rem;
+  }
+}
+
+.input-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-label {
+  font-size: 0.85rem;
+  color: #fff;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.finder-select {
+  appearance: none;
+  background-color: #FFF8F0; /* Light peach / off-white */
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 0.8rem 2rem 0.8rem 1rem; /* Extra right padding for arrow */
+  font-size: 0.95rem;
+  color: #4A4A4A;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ED8F03' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+}
+
+.finder-select:hover {
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.finder-select:focus {
+  outline: none;
+  border-color: #2AC37D; /* Using a fresh green or similar for focus, or stay orange? Let's use darker orange */
+  border-color: #e65100;
+  box-shadow: 0 0 0 3px rgba(230, 81, 0, 0.2);
+}
+
+.find-gift-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #E65100; /* Darker orange */
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(230, 81, 0, 0.3);
+  height: 48px; /* Match typical input height */
+  margin-top: auto; /* Push to bottom if aligning with labels */
+  white-space: nowrap;
+}
+
+.find-gift-btn:hover {
+  background-color: #C2410C;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(194, 65, 12, 0.4);
+}
+
+.find-gift-btn:active {
+  transform: translateY(0);
+}
+
+.find-gift-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Results section styling */
+.results-container {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.product-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-image-wrapper {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: #f9f9f9;
+}
+
+.product-image {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.product-info {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-title {
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.product-brand {
+  font-size: 0.75rem;
+  color: #888;
+  margin-bottom: 0.25rem;
+}
+
+.product-price {
+  font-weight: 700;
+  color: #E65100;
+  margin-top: auto;
+  font-size: 1.1rem;
+}
+
+.product-link {
+  display: block;
+  text-align: center;
+  background: #f0f0f0;
+  color: #333;
+  padding: 0.5rem;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.product-link:hover {
+  background: #e0e0e0;
+}
