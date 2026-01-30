@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Gift, Loader2 } from 'lucide-react';
 import './GiftFinder.css';
 import { ARCHETYPES, BUDGETS } from '../utils/data';
-import { finder } from '../utils/Finder';
+import { finder, Finder } from '../utils/Finder';
 import type { iSKU } from '../utils/interfaces';
 
 const GiftFinder: React.FC = () => {
@@ -28,30 +28,42 @@ const GiftFinder: React.FC = () => {
         setHasSearched(true);
 
         try {
-            // Construct Search URL
-            // Logic: https://www.jumia.com.ng/catalog/?q=search+term
-            // "country" state holds the locale path e.g. '/ng'
-
-            // Note: The Finder class expects a full URL for findProductsByUrl's first arg, 
-            // OR a base URL to append page. 
-            // Let's use Finder.getUrl logic manually or via helper if available.
-            // finder.buildProductUrl builds for a specific SKU with ?q=sku. 
-            // We want general search.
+            const parseBudget = (b: string) => {
+                const numbers = b.replace(/[^0-9]/g, '-').split('-').filter(Boolean).map(Number);
+                if (b.toLowerCase().includes('under')) return { min: 0, max: numbers[0] };
+                if (b.toLowerCase().includes('above')) return { min: numbers[0], max: 2000000 }; // Use a large number instead of Infinity for URL
+                return { min: numbers[0], max: numbers[1] };
+            };
 
             const baseUrl = `https://www.jumia${country}`;
             const searchPath = `/catalog/`;
             const query = encodeURIComponent(category);
+            let searchUrl = `${baseUrl}${searchPath}?q=${query}&shop_premium_services=shop_express`;
 
-            // We will perform a search query
-            const searchUrl = `${baseUrl}${searchPath}?q=${query}&shop_premium_services=shop_express`;
+            let budgetLimit = { min: 0, max: Infinity };
+            if (budget) {
+                const { min, max } = parseBudget(budget);
+                budgetLimit = { min, max };
+                // Jumia URL parameters for price: price=min-max
+                searchUrl += `&price=${min}-${max === Infinity ? '' : max}`;
+            }
 
             console.log(`Searching: ${searchUrl}`);
 
-            // Fetch up to 10 pages as requested
-            const foundProducts = await finder.findProductsByUrl(searchUrl, 10);
+            // Fetch up to 5 pages (reduced from 10 for speed, especially since we filtered by price in URL)
+            const foundProducts = await finder.findProductsByUrl(searchUrl, 5);
+
+            // Double check filter by budget in-memory (to be safe)
+            let filteredProducts = foundProducts;
+            if (budget) {
+                filteredProducts = foundProducts.filter(p => {
+                    const price = Finder.extractNumberFromPrice(p.prices.price);
+                    return price >= budgetLimit.min && price <= budgetLimit.max;
+                });
+            }
 
             // Prioritize Jumia Express products
-            const prioritizedProducts = [...foundProducts].sort((a, b) => {
+            const prioritizedProducts = [...filteredProducts].sort((a, b) => {
                 const aExpress = a.isShopExpress || a.shopExpress ? 1 : 0;
                 const bExpress = b.isShopExpress || b.shopExpress ? 1 : 0;
                 return bExpress - aExpress;

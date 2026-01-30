@@ -466,6 +466,7 @@ export class Finder {
     }
 
     static extractNumberFromPrice(price: string): number {
+        if (!price) return 0;
         return parseFloat(price.replace(/[^0-9.]/g, '')) || 0;
     }
 
